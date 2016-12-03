@@ -1,34 +1,14 @@
 <resources>
-    <string name="app_name">ProjectManager</string>
-    <string name="project_title_hint">Enter a title for the project.</string>
-    <string name="project_subtitle_hint">Enter a subtitle.</string>
-    <string name="project_title_label">Title</string>
-    <string name="project_subtitle_label">Subtitle</string>
-    <string name="crime_details_label">Details</string>
-    <string name="project_finished_label">Finished</string>
-    <string name="date_picker_title">Date of crime:</string>
-    <string name="time_picker_title">Time of crime:</string>
-    <string name="new_project">New Project</string>
-    <string name="delete_crime">Delete Crime</string>
-    <string name="show_subtitle">Show Subtitle</string>
-    <string name="hide_subtitle">Hide Subtitle</string>
-    <string name="subtitle_format">%1$s crimes</string>
-    <string name="crime_suspect_text">Choose Suspect</string>
-    <string name="call_suspect_text">Call Suspect</string>
-    <string name="crime_report_text">Send Crime Report</string>
-    <string name="crime_report">%1$s for %2$s!
-        The crime was discovered on %3$s. %4$s, and %5$s
-    </string>
-    <string name="project_report_finished">The project is finished</string>
-    <string name="project_report_unfinished">The project is not finished</string>
-    <string name="project_report_no_assignee">there is no assignee.</string>
-    <string name="project_report_assignee">the assignee is %s.</string>
-    <string name="crime_report_subject">CriminalIntent Crime Report</string>
-    <string name="send_report">Send crime report via</string>
-    <string name="project_empty_details">Welcome to ProjectManager!
-        A whole new take on time managment.</string>
-    <plurals name="subtitle_plural">
-        <item quantity="one">%1$s crime</item>
-        <item quantity="other">%1$s crimes</item>
-    </plurals>
+    <string name="app_name">Task Manager</string>
+    <string name="tasks">Tasks</string>
+    <string name="add_task">Add Task</string>
+    <string name="cancel_task">Cancel</string>
+    <string name="unsaved_changes_title">Unsaved Changes</string>
+    <string name="unsaved_changes_message">Would you like to add this task?</string>
+    <string name="discard">Discard</string>
+    <string name="no_task">No Tasks.</string>
+    <string name="remove_completed_tasks">Remove Complete</string>
+    <string name="add_location_to_task">Add Location To Task</string>
+    <string name="map_this_address">Map this address</string>
+    <string name="use_this_location">Use this location</string>
 </resources>
