@@ -18,32 +18,32 @@ import com.bignerdranch.android.taskmanager.tasks.Task;
  * Created by Eduardo on 12/1/2016.
  */
 public class AddTaskActivity extends TaskManagerActivity {
-    private static final int REQUEST_CHOOSE_ADDRESS = 0;
 
+    protected static final int REQUEST_CHOOSE_ADDRESS = 1;
+
+    private AlertDialog unsavedChangesDialog;
+    private TextView addressText;
     private EditText taskNameEditText;
     private Button addButton;
     private Button cancelButton;
-    private boolean changesPending;
-    private AlertDialog unsavedChangesDialog;
     private Button addLocationButton;
+    private boolean changesPending;
     private Address address;
-    private TextView addressText;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_tasks);
+
         setUpViews();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        if (address == null) {
+        if (null == address) {
             addLocationButton.setVisibility(View.VISIBLE);
             addressText.setVisibility(View.GONE);
-            //addressText.setVisibility(View.VISIBLE);
-            //addressText.setText("ADDRESS ALWAYS NULL");
         } else {
             addLocationButton.setVisibility(View.GONE);
             addressText.setVisibility(View.VISIBLE);
@@ -53,91 +53,39 @@ public class AddTaskActivity extends TaskManagerActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_CHOOSE_ADDRESS && requestCode == RESULT_OK) {
+        if (REQUEST_CHOOSE_ADDRESS == requestCode && RESULT_OK == resultCode) {
             address = data.getParcelableExtra(AddLocationMapActivity.ADDRESS_RESULT);
         } else {
             super.onActivityResult(requestCode, resultCode, data);
         }
     }
 
-    private void setUpViews() {
-        taskNameEditText = (EditText) findViewById(R.id.task_name);
-        addButton = (Button) findViewById(R.id.add_button);
-        cancelButton = (Button) findViewById(R.id.cancel_button);
-        addLocationButton = (Button) findViewById(R.id.add_location_button);
-        addressText = (TextView) findViewById(R.id.address_text);
-
-        addButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                addTask();
-            }
-        });
-        cancelButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                cancel();
-            }
-        });
-        addLocationButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Intent intent = new Intent(AddTaskActivity.this, AddLocationMapActivity.class);
-                startActivityForResult(intent, REQUEST_CHOOSE_ADDRESS);
-            }
-        });
-        taskNameEditText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                changesPending = true;
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-    }
-
     protected void addTask() {
         String taskName = taskNameEditText.getText().toString();
-        if (!taskName.equals("")) {
-            Task t = new Task(taskName);
-            t.setAddress(address);
-            getTaskManagerApplication().addTask(t);
-        }
+        Task t = new Task(taskName);
+        t.setAddress(address);
+        getTaskManagerApplication().addTask(t);
+        //getStuffApplication().addTask(t);
+
         finish();
     }
 
-    public void addLocationButtonClicked(View view) {
-        Intent intent = new Intent(this, AddLocationMapActivity.class);
-        startActivityForResult(intent, REQUEST_CHOOSE_ADDRESS);
-    }
-
     protected void cancel() {
-        String taskName = taskNameEditText.getText().toString();
-        if (changesPending && !taskName.equals("")) {
+        if (changesPending) {
             unsavedChangesDialog = new AlertDialog.Builder(this)
                     .setTitle(R.string.unsaved_changes_title)
                     .setMessage(R.string.unsaved_changes_message)
                     .setPositiveButton(R.string.add_task, new AlertDialog.OnClickListener() {
-                        @Override
                         public void onClick(DialogInterface dialog, int which) {
                             addTask();
                         }
                     })
                     .setNeutralButton(R.string.discard, new AlertDialog.OnClickListener() {
-                        @Override
                         public void onClick(DialogInterface dialog, int which) {
                             finish();
                         }
                     })
                     .setNegativeButton(android.R.string.cancel, new AlertDialog.OnClickListener() {
-                        @Override
                         public void onClick(DialogInterface dialog, int which) {
                             unsavedChangesDialog.cancel();
                         }
@@ -147,5 +95,39 @@ public class AddTaskActivity extends TaskManagerActivity {
         } else {
             finish();
         }
+    }
+
+    private void setUpViews() {
+        addressText = (TextView)findViewById(R.id.address_text);
+        taskNameEditText = (EditText)findViewById(R.id.task_name);
+        addButton = (Button)findViewById(R.id.add_button);
+        addLocationButton = (Button)findViewById(R.id.add_location_button);
+        cancelButton = (Button)findViewById(R.id.cancel_button);
+
+        addButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                addTask();
+            }
+        });
+
+        addLocationButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent intent = new Intent(AddTaskActivity.this, AddLocationMapActivity.class);
+                startActivityForResult(intent, REQUEST_CHOOSE_ADDRESS);
+            }
+        });
+
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                cancel();
+            }
+        });
+        taskNameEditText.addTextChangedListener(new TextWatcher() {
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                changesPending = true;
+            }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+            public void afterTextChanged(Editable s) { }
+        });
     }
 }

@@ -26,12 +26,8 @@ public class TaskListItem extends LinearLayout {
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
-        checkbox = (CheckedTextView) findViewById(android.R.id.text1);
-        addressText = (TextView) findViewById(R.id.address_text);
-    }
-
-    public Task getTask() {
-        return task;
+        checkbox = (CheckedTextView)findViewById(android.R.id.text1);
+        addressText = (TextView)findViewById(R.id.address_text);
     }
 
     public void setTask(Task task) {
@@ -44,5 +40,9 @@ public class TaskListItem extends LinearLayout {
         } else {
             addressText.setVisibility(View.GONE);
         }
+    }
+
+    public Task getTask() {
+        return task;
     }
 }

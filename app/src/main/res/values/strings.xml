@@ -7,9 +7,11 @@
     <string name="unsaved_changes_message">Would you like to add this task?</string>
     <string name="discard">Discard</string>
     <string name="no_task">No Tasks.</string>
+    <string name="plus_sign"> + </string>
     <string name="remove_completed_tasks">Remove Complete</string>
     <string name="add_location_to_task">Add Location To Task</string>
     <string name="map_this_address">Map this address</string>
     <string name="use_this_location">Use this location</string>
     <string name="title_activity_add_location_maps">Map</string>
+    <string name="show_local">Show Local Tasks Only</string>
 </resources>
