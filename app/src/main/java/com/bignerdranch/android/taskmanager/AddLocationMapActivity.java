@@ -1,79 +1,117 @@
 package com.bignerdranch.android.taskmanager;
 
+import android.content.Intent;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 
-import com.google.android.maps.MapActivity;
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.UiSettings;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
-/**
- * Created by Eduardo on 12/2/2016.
- */
-public class AddLocationMapActivity extends MapActivity {
+import java.io.IOException;
+import java.util.List;
+
+public class AddLocationMapActivity extends FragmentActivity implements OnMapReadyCallback {
 
     public static final String ADDRESS_RESULT = "address";
 
-    /*private Button mapLocationButton;
+    private GoogleMap mMap;
+    private UiSettings mUiSettings;
+    private Button mapLocationButton;
     private Button useLocationButton;
     private EditText addressText;
-    private MapView mapView;
-    private Address address;*/
+    private Address address;
+
 
     @Override
-    protected void onCreate(Bundle bundle) {
-        super.onCreate(bundle);
-        setContentView(R.layout.add_location);
-        //setUpViews();
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_add_location_maps);
+
+        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
     }
 
+
+    /**
+     * Manipulates the map once available.
+     * This callback is triggered when the map is ready to be used.
+     * This is where we can add markers or lines, add listeners or move the camera. In this case,
+     * we just add a marker near Sydney, Australia.
+     * If Google Play services is not installed on the device, the user will be prompted to install
+     * it inside the SupportMapFragment. This method will only be triggered once the user has
+     * installed Google Play services and returned to the app.
+     */
     @Override
-    protected boolean isRouteDisplayed() {
-        return false;
+    public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
+        mUiSettings = mMap.getUiSettings();
+
+        // Add zoom buttons
+        mUiSettings.setZoomControlsEnabled(true);
+        setUpViews();
     }
 
-    @Override
-    protected boolean isLocationDisplayed() {
-        return true;
-    }
-
-    /*private void setUpViews() {
+    private void setUpViews() {
         addressText = (EditText) findViewById(R.id.task_address);
         mapLocationButton = (Button) findViewById(R.id.map_location_button);
         useLocationButton = (Button) findViewById(R.id.use_this_location_button);
-        mapView = (MapView) findViewById(R.id.map);
         useLocationButton.setEnabled(false);
-        mapView.setBuiltInZoomControls(true);
 
-        /*mapLocationButton.setOnClickListener(new View.OnClickListener() {
+        useLocationButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                if (address != null) {
+                    Intent intent = new Intent();
+                    intent.putExtra(ADDRESS_RESULT, address);
+                    setResult(RESULT_OK, intent);
+                }
+
+                finish();
+            }
+        });
+        mapLocationButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 mapCurrentAddress();
             }
         });
-    }*/
+    }
 
-    /*protected void mapCurrentAddress() {
-        String addressString = addressText.getText().toString();
-        Geocoder g = new Geocoder(this);
+    protected void mapCurrentAddress() {
+        String location = addressText.getText().toString();
         List<Address> addresses;
-        try {
-            addresses = g.getFromLocationName(addressString, 1);
-            if (addresses.size() > 0) {
-                address = addresses.get(0);
-                List<Overlay> mapOverlays = mapView.getOverlays();
-                AddressOverlay addressOverlay = new AddressOverlay(address);
-                mapOverlays.add(addressOverlay);
-                mapView.invalidate();
-                final MapController mapController = mapView.getController();
-                mapController.animateTo(addressOverlay.getGeopoint(), new Runnable() {
-                    public void run() {
-                        mapController.setZoom(12);
-                    }
-                });
-                useLocationButton.setEnabled(true);
-            } else {
-                // show the user a note that we failed to get an address
+
+        if (location != null || !location.equals("")) {
+            Geocoder geocoder = new Geocoder(this);
+            try {
+                addresses = geocoder.getFromLocationName(location, 1);
+                if (addresses.size() > 0) {
+                    address = addresses.get(0);
+                    LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
+                    CameraUpdate center = CameraUpdateFactory.newLatLng(latLng);
+                    CameraUpdate zoom = CameraUpdateFactory.zoomTo(12);
+                    mMap.moveCamera(center);
+                    mMap.addMarker(new MarkerOptions().position(latLng).title("Marker"));
+                    mMap.animateCamera(zoom);
+                    useLocationButton.setEnabled(true);
+                } else {
+                    // show the user a note that we failed to get an address
+                }
+
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-        } catch (IOException e) {
-            // show the user a note that we failed to get an address
-            e.printStackTrace();
         }
-    }*/
+    }
 }

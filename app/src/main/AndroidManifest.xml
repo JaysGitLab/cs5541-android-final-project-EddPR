@@ -2,11 +2,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.bignerdranch.android.taskmanager">
 
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
     <application
         android:name=".TaskManagerApplication"
@@ -16,8 +16,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <meta-data
-            android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyBQchIroT6qb2UGPVh18V9d6q6vX8rZcN0" />
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_maps_key"/>
+
         <activity android:name=".ViewTasksActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -25,12 +26,15 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".AddTaskActivity"
-                  android:text="@string/add_task"/>
-        <activity android:name=".AddLocationMapActivity"
-                  android:text="@string/add_location_to_task"/>
+        <activity
+            android:name=".AddTaskActivity"
+            android:text="@string/add_task"/>
+        <activity
+            android:name=".AddLocationMapActivity"
+            android:text="@string/add_location_to_task"/>
 
-        <uses-library android:name="com.google.android.maps" />
+        <uses-library android:name="com.google.android.maps"/>
+
     </application>
 
 </manifest>

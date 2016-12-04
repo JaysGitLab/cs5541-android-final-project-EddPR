@@ -10,6 +10,7 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.bignerdranch.android.taskmanager.tasks.Task;
 
@@ -24,13 +25,30 @@ public class AddTaskActivity extends TaskManagerActivity {
     private Button cancelButton;
     private boolean changesPending;
     private AlertDialog unsavedChangesDialog;
+    private Button addLocationButton;
     private Address address;
+    private TextView addressText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_tasks);
         setUpViews();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (address == null) {
+            addLocationButton.setVisibility(View.VISIBLE);
+            addressText.setVisibility(View.GONE);
+            //addressText.setVisibility(View.VISIBLE);
+            //addressText.setText("ADDRESS ALWAYS NULL");
+        } else {
+            addLocationButton.setVisibility(View.GONE);
+            addressText.setVisibility(View.VISIBLE);
+            addressText.setText(address.getAddressLine(0));
+        }
     }
 
     @Override
@@ -46,6 +64,9 @@ public class AddTaskActivity extends TaskManagerActivity {
         taskNameEditText = (EditText) findViewById(R.id.task_name);
         addButton = (Button) findViewById(R.id.add_button);
         cancelButton = (Button) findViewById(R.id.cancel_button);
+        addLocationButton = (Button) findViewById(R.id.add_location_button);
+        addressText = (TextView) findViewById(R.id.address_text);
+
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -56,6 +77,12 @@ public class AddTaskActivity extends TaskManagerActivity {
             @Override
             public void onClick(View v) {
                 cancel();
+            }
+        });
+        addLocationButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent intent = new Intent(AddTaskActivity.this, AddLocationMapActivity.class);
+                startActivityForResult(intent, REQUEST_CHOOSE_ADDRESS);
             }
         });
         taskNameEditText.addTextChangedListener(new TextWatcher() {
@@ -80,6 +107,7 @@ public class AddTaskActivity extends TaskManagerActivity {
         String taskName = taskNameEditText.getText().toString();
         if (!taskName.equals("")) {
             Task t = new Task(taskName);
+            t.setAddress(address);
             getTaskManagerApplication().addTask(t);
         }
         finish();

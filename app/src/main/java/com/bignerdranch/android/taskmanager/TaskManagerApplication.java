@@ -10,11 +10,7 @@ import com.bignerdranch.android.taskmanager.tasks.TasksSQLiteOpenHelper;
 
 import java.util.ArrayList;
 
-import static com.bignerdranch.android.taskmanager.tasks.TasksSQLiteOpenHelper.TASKS_TABLE;
-import static com.bignerdranch.android.taskmanager.tasks.TasksSQLiteOpenHelper.TASK_COMPLETE;
-import static com.bignerdranch.android.taskmanager.tasks.TasksSQLiteOpenHelper.TASK_ID;
-import static com.bignerdranch.android.taskmanager.tasks.TasksSQLiteOpenHelper.TASK_NAME;
-
+import static com.bignerdranch.android.taskmanager.tasks.TasksSQLiteOpenHelper.*;
 /**
  * Created by Eduardo on 12/1/2016.
  */
@@ -36,7 +32,8 @@ public class TaskManagerApplication extends Application {
     private void loadTasks() {
         currentTasks = new ArrayList<Task>();
         Cursor tasksCursor = database.query(
-                TASKS_TABLE, new String[]{TASK_ID, TASK_NAME, TASK_COMPLETE},
+                TASKS_TABLE,
+                new String[]{TASK_ID, TASK_NAME, TASK_COMPLETE, TASK_ADDRESS, TASK_LATITUDE, TASK_LONGITUDE},
                 null, null, null, null, String.format("%s,%s", TASK_COMPLETE, TASK_NAME));
         tasksCursor.moveToFirst();
         Task t;
@@ -46,9 +43,15 @@ public class TaskManagerApplication extends Application {
                 String name = tasksCursor.getString(1);
                 String boolValue = tasksCursor.getString(2);
                 boolean complete = Boolean.parseBoolean(boolValue);
+                String address = tasksCursor.getString(3);
+                float latitude = tasksCursor.getFloat(4);
+                float longitude = tasksCursor.getFloat(5);
                 t = new Task(name);
                 t.setId(id);
                 t.setComplete(complete);
+                t.setAddress(address);
+                t.setLatitude(latitude);
+                t.setLongitude(longitude);
                 currentTasks.add(t);
             } while (tasksCursor.moveToNext());
         }
@@ -62,6 +65,10 @@ public class TaskManagerApplication extends Application {
         ContentValues values = new ContentValues();
         values.put(TASK_NAME, t.getName());
         values.put(TASK_COMPLETE, Boolean.toString(t.isComplete()));
+        values.put(TASK_ADDRESS, t.getAddress());
+        values.put(TASK_LATITUDE, t.getLatitude());
+        values.put(TASK_LONGITUDE, t.getLongitude());
+
         long id = database.insert(TASKS_TABLE, null, values);
         t.setId(id);
         currentTasks.add(t);
@@ -73,6 +80,9 @@ public class TaskManagerApplication extends Application {
         ContentValues values = new ContentValues();
         values.put(TASK_NAME, t.getName());
         values.put(TASK_COMPLETE, Boolean.toString(t.isComplete()));
+        values.put(TASK_ADDRESS, t.getAddress());
+        values.put(TASK_LATITUDE, t.getLatitude());
+        values.put(TASK_LONGITUDE, t.getLongitude());
 
         long id = t.getId();
         String where = String.format("%s = ?", TASK_ID, id);

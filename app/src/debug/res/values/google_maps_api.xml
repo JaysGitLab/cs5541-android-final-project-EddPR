@@ -1,0 +1,21 @@
+<resources>
+    <!--
+    TODO: Before you run your application, you need a Google Maps API key.
+
+    To get one, follow this link, follow the directions and press "Create" at the end:
+
+    https://console.developers.google.com/flows/enableapi?apiid=maps_android_backend&keyType=CLIENT_SIDE_ANDROID&r=C1:3B:77:93:17:7A:8F:24:1A:38:86:68:32:04:F7:3B:F5:EE:54:E5%3Bcom.bignerdranch.android.taskmanager
+
+    You can also add your credentials to an existing key, using this line:
+    C1:3B:77:93:17:7A:8F:24:1A:38:86:68:32:04:F7:3B:F5:EE:54:E5;com.bignerdranch.android.taskmanager
+
+    Alternatively, follow the directions here:
+    https://developers.google.com/maps/documentation/android/start#get-key
+
+    Once you have your key (it starts with "AIza"), replace the "google_maps_key"
+    string in this file.
+    -->
+    <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">
+        AIzaSyBQchIroT6qb2UGPVh18V9d6q6vX8rZcN0
+    </string>
+</resources>
