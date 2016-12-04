@@ -138,7 +138,7 @@ public class ViewTasksActivity extends ListActivity implements LocationListener 
         locationManager.requestLocationUpdates(
                 LocationManager.NETWORK_PROVIDER,
                 60,
-                20000,
+                5,
                 this);
     }
 }
